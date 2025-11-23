@@ -57,14 +57,14 @@ scap = { git = "https://github.com/mg-chao/scap", branch = "20250712_custom" }
 objc2 = "0.6.1"
 objc2-app-kit = { version = "0.3.1" }
 objc2-foundation = { version = "0.3.1" }
-uiautomation = "0.24.0"
+uiautomation = "0.18.0"
 macos-accessibility-client = "0.0.1"
 dashmap = "6.1.0"
 reqwest = "0.12"
 futures-lite = "2.6.1"
 tokio-util = "0.7.16"
 futures-util = "0.3"
-windows = "0.61"
+windows = "0.52"
 base64 = "^0.22"
 tauri-plugin-clipboard-manager = "^2"
 clipboard-win = "5.4.1"
