@@ -1,8 +1,7 @@
 use dashmap::DashMap;
 use std::sync::mpsc::channel;
 use webview2_com::Microsoft::Web::WebView2::Win32::{
-    COREWEBVIEW2_SHARED_BUFFER_ACCESS_READ_WRITE, ICoreWebView2_17, ICoreWebView2Environment12,
-    ICoreWebView2SharedBuffer,
+    ICoreWebView2Environment, ICoreWebView2, ICoreWebView2SharedBuffer,
 };
 use windows_core::Interface;
 

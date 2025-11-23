@@ -25,8 +25,8 @@
 			"certificateThumbprint": null,
 			"digestAlgorithm": "sha256",
 			"webviewInstallMode": {
-				"silent": true,
-				"type": "embedBootstrapper"
+				"type": "fixedRuntime",
+				"path": "Microsoft.WebView2.FixedVersionRuntime.108.0.1528.120.x64"
 			},
 			"nsis": {
 				"template": "./build-configs/installer.nsi",
