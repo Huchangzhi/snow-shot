@@ -1,75 +1,55 @@
 ```
+# Compiled and build artifacts
+*.pyc
+__pycache__/
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.a
+*.out
+
 # Dependencies
 node_modules/
-vendor/
-target/
-**/target/
-.cargo/
-**/.cargo/
-
-# Build artifacts
-**/build/
-**/dist/
-**/out/
-**/bin/
-**/obj/
-
-# Tauri specific
-**/src-tauri/target/
-**/src-tauri/Cargo.lock
-**/src-tauri/node_modules/
-**/src-tauri/dist/
-
-# Logs
-*.log
-**/*.log
-
-# Environment
+venv/
+.venv/
 .env
 .env.local
 .env.*
-**/.env
-**/.env.local
-**/.env.*
 
-# Editor
-.vscode/
-.idea/
+# Logs and temp files
+*.log
+*.tmp
 *.swp
 *.swo
-**/.vscode/
-**/.idea/
 
-# OS
+# Editors
+.vscode/
+.idea/
+
+# Build directories
+dist/
+build/
+target/
+.gradle/
+
+# System files
 .DS_Store
 Thumbs.db
-**/.DS_Store
-**/Thumbs.db
 
-# Python (if applicable)
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-**/__pycache__/
-**/*.pyc
-**/*.pyo
-**/*.pyd
+# Coverage
+coverage/
+htmlcov/
+.coverage
 
-# Rust (if applicable)
-**/Cargo.lock
-**/target/
-**/Cargo.toml.orig
-**/Cargo.lock~
+# Rust/Cargo specific
+Cargo.lock
+*.rs.bk
+```
 
-# Temporary files
-*.tmp
-*.temp
-*.bak
-*.backup
-**/*.tmp
-**/*.temp
-**/*.bak
-**/*.backup
+Wait, looking at the changes again - only a Rust source file was modified (`src-tauri/src-crates/webview/src/windows/mod.rs`), and no build artifacts or temporary files were mentioned in the changes. This appears to be just source code changes.
+
+```
+
 ```

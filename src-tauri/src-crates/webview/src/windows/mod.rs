@@ -4,6 +4,7 @@ use webview2_com::Microsoft::Web::WebView2::Win32::{
     ICoreWebView2Environment, ICoreWebView2, ICoreWebView2SharedBuffer,
 };
 use windows_core::Interface;
+use webview2_com::Microsoft::Web::WebView2::Win32::COREWEBVIEW2_SHARED_BUFFER_ACCESS_READ_WRITE;
 
 pub async fn create_shared_buffer(
     webview: tauri::Webview,
@@ -34,21 +35,9 @@ pub async fn create_shared_buffer(
             }
         };
 
-        let enviroment_12 = match environment.cast::<ICoreWebView2Environment12>() {
-            Ok(environment) => environment,
-            Err(e) => {
-                sender
-                    .send(Err(format!(
-                        "[create_shared_buffer] Failed to create shared buffer: {:?}",
-                        e
-                    )))
-                    .unwrap();
-                return;
-            }
-        };
-
+        // 使用基础的 ICoreWebView2Environment 接口而不是 ICoreWebView2Environment12
         let data_len = data_static.len() + extra_data_static.len();
-        let shared_buffer = match unsafe { enviroment_12.CreateSharedBuffer(data_len as u64) } {
+        let shared_buffer = match unsafe { environment.CreateSharedBuffer(data_len as u64) } {
             Ok(sharedbuffer) => sharedbuffer,
             Err(e) => {
                 sender
@@ -75,19 +64,6 @@ pub async fn create_shared_buffer(
             }
         };
 
-        let webview_17 = match core_webview.cast::<ICoreWebView2_17>() {
-            Ok(environment) => environment,
-            Err(e) => {
-                sender
-                    .send(Err(format!(
-                        "[create_shared_buffer] Failed to cast to ICoreWebView2_17: {:?}",
-                        e
-                    )))
-                    .unwrap();
-                return;
-            }
-        };
-
         // 将数据拷贝到 shared_buffer
         unsafe {
             std::ptr::copy_nonoverlapping(
@@ -107,10 +83,11 @@ pub async fn create_shared_buffer(
                 .encode_utf16()
                 .chain(std::iter::once(0)) // null terminator
                 .collect();
-        let additional_data = windows::core::PCWSTR::from_raw(additional_data_string.as_ptr());
+        let additional_data = windows_core::PCWSTR::from_raw(additional_data_string.as_ptr());
 
+        // 使用基础的 ICoreWebView2 接口而不是 ICoreWebView2_17
         match unsafe {
-            webview_17.PostSharedBufferToScript(
+            core_webview.PostSharedBufferToScript(
                 &shared_buffer,
                 COREWEBVIEW2_SHARED_BUFFER_ACCESS_READ_WRITE,
                 additional_data,
@@ -205,20 +182,8 @@ impl SharedBufferService {
                 }
             };
 
-            let enviroment_12 = match environment.cast::<ICoreWebView2Environment12>() {
-                Ok(environment) => environment,
-                Err(e) => {
-                    sender
-                        .send(Err(format!(
-                            "[SharedBufferService::create_channel] Failed to create shared buffer: {:?}",
-                            e
-                        )))
-                        .unwrap();
-                    return;
-                }
-            };
-
-            let shared_buffer = match unsafe { enviroment_12.CreateSharedBuffer(data_size as u64) } {
+            // 使用基础的 ICoreWebView2Environment 接口而不是 ICoreWebView2Environment12
+            let shared_buffer = match unsafe { environment.CreateSharedBuffer(data_size as u64) } {
                 Ok(sharedbuffer) => sharedbuffer,
                 Err(e) => {
                     sender
@@ -232,28 +197,15 @@ impl SharedBufferService {
             };
 
 
-            let webview_17 = match core_webview.cast::<ICoreWebView2_17>() {
-                Ok(environment) => environment,
-                Err(e) => {
-                    sender
-                        .send(Err(format!(
-                            "[create_shared_buffer] Failed to cast to ICoreWebView2_17: {:?}",
-                            e
-                        )))
-                        .unwrap();
-                    return;
-                }
-            };
-
             // Keep the UTF-16 string alive until after PostSharedBufferToScript
             let channel_info_string: Vec<u16> = format!("{{\"id\":\"{}\"}}", id_clone)
                 .encode_utf16()
                 .chain(std::iter::once(0)) // null terminator
                 .collect();
-            let channel_info = windows::core::PCWSTR::from_raw(channel_info_string.as_ptr());
+            let channel_info = windows_core::PCWSTR::from_raw(channel_info_string.as_ptr());
 
             match unsafe {
-                webview_17.PostSharedBufferToScript(
+                core_webview.PostSharedBufferToScript(
                     &shared_buffer,
                     COREWEBVIEW2_SHARED_BUFFER_ACCESS_READ_WRITE,
                     channel_info,
